@@ -1,6 +1,6 @@
 # Тестовое задание (Игра сапер)
 
-## Описание, спецификация и интерфейс доступны по ссылке https://minesweeper-test.studiotg.ru/swagger/
+## Спецификация и интерфейс доступны по ссылке https://minesweeper-test.studiotg.ru/swagger/
 
 
 
