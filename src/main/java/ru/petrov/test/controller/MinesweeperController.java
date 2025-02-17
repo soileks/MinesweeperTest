@@ -11,48 +11,28 @@ import ru.petrov.test.model.ErrorResponses;
 import ru.petrov.test.model.Game;
 import ru.petrov.test.model.GameSettings;
 import ru.petrov.test.model.TurnRequest;
-import ru.petrov.test.service.GameService;
+import ru.petrov.test.service.InterfaceGameService;
 
 @RestController
 @CrossOrigin(origins = "https://minesweeper-test.studiotg.ru/")
 public class MinesweeperController {
-    private final GameService gameService;
-    private Game game;
+    private final InterfaceGameService gameService;
 
     @Autowired
-    public MinesweeperController(GameService gameService) {
+    public MinesweeperController(InterfaceGameService gameService) {
         this.gameService = gameService;
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@RequestBody GameSettings settings){
-        try {
-             game = gameService.createNewGame(settings.getWidth(), settings.getHeight(), settings.getMines_count());
-
-            return ResponseEntity.ok(game);
-        }
-        catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(new ErrorResponses(400, e.getMessage()));
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body("Unexpected error: " + e.getMessage());
-        }
-
+        Game game = gameService.createNewGame(settings);
+        return ResponseEntity.ok(game);
     }
 
     @PostMapping("/turn")
     public ResponseEntity<?> makeTurn(@RequestBody TurnRequest turn){
-        try {
-            game = gameService.makeTurn(turn.getGame_id(), turn.getCol(), turn.getRow());
-            return ResponseEntity.ok(game);
-
-        }
-        catch (IllegalArgumentException | IllegalStateException e){
-            return ResponseEntity.badRequest().body( new ErrorResponses(400, e.getMessage()));
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body("Unexpected error: " + e.getMessage());
-        }
+        Game game = gameService.makeTurn(turn);
+        return ResponseEntity.ok(game);
     }
 
 

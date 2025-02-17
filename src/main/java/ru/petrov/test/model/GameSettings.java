@@ -1,13 +1,16 @@
 package ru.petrov.test.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class GameSettings {
 
-    private int height;
-
+    @JsonProperty("width")
     private int width;
-
-    private int mines_count;
+    @JsonProperty("height")
+    private int height;
+    @JsonProperty("mines_count")
+    private int minesCount;
 
     public GameSettings(){}
 
@@ -15,8 +18,8 @@ public class GameSettings {
         this.height = height;
     }
 
-    public void setMines_count(int mines_count) {
-        this.mines_count = mines_count;
+    public void setMinesCount(int minesCount) {
+        this.minesCount = minesCount;
     }
 
     public void setWidth(int width) {
@@ -27,10 +30,9 @@ public class GameSettings {
         return height;
     }
 
-    public int getMines_count() {
-        return mines_count;
+    public int getMinesCount() {
+        return minesCount;
     }
-
 
     public int getWidth() {
         return width;

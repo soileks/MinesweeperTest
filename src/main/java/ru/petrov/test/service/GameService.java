@@ -4,22 +4,27 @@ import ru.petrov.test.model.Game;
 
 import org.springframework.stereotype.Service;
 import ru.petrov.test.model.Game;
+import ru.petrov.test.model.GameSettings;
+import ru.petrov.test.model.TurnRequest;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class GameService {
+public class GameService implements InterfaceGameService {
     private static final int MAX_WIDTH = 30;
     private static final int MAX_HEIGHT = 30;
     private final Map<String, Game> games = new ConcurrentHashMap<>();
 
-    public Game createNewGame(int width, int height, int minesCount) {
-        if (width < 1 || width > MAX_WIDTH) {
+    public Game createNewGame(GameSettings settings) {
+        int width = settings.getWidth();
+        int height = settings.getHeight();
+        int minesCount = settings.getMinesCount();
+        if (width < 2 || width > MAX_WIDTH) {
             throw new IllegalArgumentException("Ширина поля должна быть от 2 до " + MAX_WIDTH);
         }
-        if (height < 1 || height > MAX_HEIGHT) {
+        if (height < 2 || height > MAX_HEIGHT) {
             throw new IllegalArgumentException("Высота поля должна быть от 2 до " + MAX_HEIGHT);
         }
         if (minesCount < 1 || minesCount >= width * height) {
@@ -32,7 +37,10 @@ public class GameService {
         return game;
     }
 
-    public Game makeTurn(String gameId, int col, int row) {
+    public Game makeTurn(TurnRequest turn) {
+        String gameId = turn.getGameId();
+        int row = turn.getRow();
+        int col = turn.getCol();
         Game game = games.get(gameId);
         if (game == null) {
             throw new IllegalArgumentException("Игра не найдена");
@@ -45,8 +53,7 @@ public class GameService {
 
         if(game.isCompleted()){
             revealAllBombs(game,"X");
-        }
-        else {
+        } else {
             // Проверяем, выиграл ли игрок
             if (checkWinCondition(game)) {
                 game.setCompleted(true);

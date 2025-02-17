@@ -1,14 +1,20 @@
 package ru.petrov.test.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import java.util.Random;
 
 public class Game {
-    private String game_id;
+    @JsonProperty("game_id")
+    private String gameId;
+    @JsonProperty("width")
     private int width;
+    @JsonProperty("height")
     private int height;
-    private int mines_count;
+    @JsonProperty("mines_count")
+    private int minesCount;
+    @JsonProperty("completed")
     private boolean completed;
     private String[][] field;
     @JsonIgnore
@@ -18,11 +24,11 @@ public class Game {
 
     public Game(){}
 
-    public Game(String gameId, int height, int width, int mines_count){
-        this.game_id=gameId;
-        this.height=height;
-        this.width=width;
-        this.mines_count=mines_count;
+    public Game(String gameId, int height, int width, int minesCount){
+        this.gameId = gameId;
+        this.height = height;
+        this.width = width;
+        this.minesCount = minesCount;
         completed = false;
         field = new String[height][width];
         bombs = new boolean[height][width];
@@ -34,14 +40,12 @@ public class Game {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 field[i][j] = " ";
-                bombs[i][j]=false;
-                revealed[i][j]=false;
             }
         }
 
         Random random = new Random();
         int minesPlaced = 0;
-        while (minesPlaced < mines_count) {
+        while (minesPlaced < minesCount) {
             int row = random.nextInt(height);
             int col = random.nextInt(width);
             if (!bombs[row][col]) {
@@ -64,10 +68,8 @@ public class Game {
             completed = true;
         } else {
             int bombsAround = countBombsAround(row, col);
-            if (bombsAround > 0) {
-                field[row][col] = String.valueOf(bombsAround); // Показываем количество бомб вокруг
-            } else {
-                field[row][col] = "0"; // Нет бомб вокруг
+            field[row][col] = String.valueOf(bombsAround); // Показываем количество бомб вокруг
+            if (bombsAround == 0) {
                 // Рекурсивно открываем соседние ячейки
                 for (int i = -1; i <= 1; i++) {
                     for (int j = -1; j <= 1; j++) {
@@ -98,8 +100,8 @@ public class Game {
         this.height = height;
     }
 
-    public void setMines_count(int mines_count) {
-        this.mines_count = mines_count;
+    public void setMines_count(int minesCount) {
+        this.minesCount = minesCount;
     }
 
     public void setWidth(int width) {
@@ -115,12 +117,12 @@ public class Game {
     }
 
 
-    public String getGame_id() {
-        return game_id;
+    public String getGameId() {
+        return gameId;
     }
 
-    public void setGame_id(String game_id) {
-        this.game_id = game_id;
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public boolean[][] getBombs() { return bombs; }
@@ -135,8 +137,8 @@ public class Game {
         return height;
     }
 
-    public int getMines_count() {
-        return mines_count;
+    public int getMinesCount() {
+        return minesCount;
     }
 
     public int getWidth() {

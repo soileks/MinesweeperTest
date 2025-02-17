@@ -1,9 +1,14 @@
 package ru.petrov.test.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TurnRequest {
-    private String game_id;
+    @JsonProperty("game_id")
+    private String gameId;
+    @JsonProperty("col")
     private int col;
+    @JsonProperty("row")
     private int row;
 
     public TurnRequest(){}
@@ -20,12 +25,12 @@ public class TurnRequest {
         return col;
     }
 
-    public String getGame_id() {
-        return game_id;
+    public String getGameId() {
+        return gameId;
     }
 
-    public void setGame_id(String game_id) {
-        this.game_id = game_id;
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public int getRow() {
